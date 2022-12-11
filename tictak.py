@@ -42,14 +42,15 @@ def check(board):
 
 def inp(board):
     x = int(input("Enter the position: "))
+    # return x
     if board [x-1]!='-':
         print('INVALID POSITION,\nEnter Again!!')
         return inp(board)
     else:
         return x
 
-# player1 = input('Enter Player 1: ')
-# player2 = input('Enter Player 2: ')
+player1 = input('Enter Name of Player 1: ')
+player2 = input('Enter Name of Player 2: ')
 display()
 
 for i in range(9):
@@ -57,16 +58,18 @@ for i in range(9):
         x = inp(board)
         board[x-1] = 'x'
         display()
+        print(str(player1)+' pressed '+ str(x))
         if check(board):
-            print('X Wins')
+            print(str(player1)+' Wins🎉')
             break
         
     else:
         x = inp(board)
         board[x-1] = 'o'
         display()
+        print(str(player2)+' pressed '+ str(x))
         if check(board):
-            print('O Wins')
+            print(str(player2)+' Wins🎉')
             break
         
 print("GAME OVER!!")
