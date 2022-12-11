@@ -42,14 +42,14 @@ def check(board):
     else:
         return False
 
-# def inp(board):
-#     x = int(input("Enter the position: "))
-#     # return x
-#     if board [x-1]!='-':
-#         print('INVALID POSITION,\nEnter Again!!')
-#         return inp(board)
-#     else:
-#         return x
+def inp(board):
+    x = int(input())
+    # return x
+    if board [x-1]!='-':
+        print('INVALID POSITION,\nEnter Again!!')
+        return inp(board)
+    else:
+        return x
 
 def animate():
         sys.stdout.write('.')
@@ -78,14 +78,41 @@ def gameover():
     time.sleep(0.3)
     sys.stdout.write('R')
 
+# def inp(player1):
+#     x = int(input(str(player1)+', its your turn: '))
+#     if board[x-1] != '-':
+#         print('INVALID POSITION,\nEnter Again')
+#     else:
+#         return x
+
+# def inp(player2):
+#     x = int(input(str(player2)+', its your turn: '))
+#     if board[x-1] != '-':
+#         print('INVALID POSITION,\nEnter Again')
+#     else:
+#         return x
+
+print(' WELCOME TO TicTacToe ')
 player1 = input('Enter Name of Player 1: ')
 player2 = input('Enter Name of Player 2: ')
 display()
 
 for i in range(9):
     if i%2 == 0:
-        # x = inp(board)
-        x = int(input(str(player1)+', its your turn: '))
+        print(player1+', its ur turn: ')
+        x = inp(board)
+        # x = int(input(str(player1)+', its your turn: '))
+
+        # x = inp(player1)
+
+        # x = int(input(str(player1)+', its your turn: '))
+
+        # if board[x-1] != '-':
+        #     print('INVALID POSITION,\nEnter Again')
+            
+        # else:
+        #     x
+
         board[x-1] = 'x'
         display()
         print(str(player1)+' pressed '+ str(x))
@@ -95,8 +122,18 @@ for i in range(9):
             break
         
     else:
-        # x = inp(board)
-        x = int(input(str(player2)+', its your turn: '))
+        print(player2+', its ur turn: ')
+        x = inp(board)
+        # x = int(input(str(player2)+', its your turn: '))
+
+        # x = inp(player2)
+
+        # x = int(input(str(player2)+', its your turn: '))
+        # if board[x-1] != '-':
+        #     print('INVALID POSITION,\nEnter Again')
+        # else:
+        #     x
+
         board[x-1] = 'o'
         display()
         print(str(player2)+' pressed '+ str(x))
