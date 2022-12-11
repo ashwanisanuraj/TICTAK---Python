@@ -1,5 +1,5 @@
-# to kill the snake when it hits the wall or itself
-# we need to add 2 if conditions
+# adding score
+# create a font object, create text with the font object, blit the text on the display surface
 
 import pygame, sys,random
 from pygame.math import Vector2
@@ -32,7 +32,6 @@ class SNAKE:
     def add_block(self):
         self.new_block = True
 
-
 class FRUIT:
     def __init__(self):
        self.randomize()
@@ -47,7 +46,6 @@ class FRUIT:
         self.y = random.randint(0,cell_number - 1)
         self.pos = Vector2(self.x,self.y)
 
-
 class MAIN: 
     def __init__(self):
         self.snake = SNAKE()
@@ -61,6 +59,7 @@ class MAIN:
     def draw_elements(self): 
         self.fruit.draw_fruit()
         self.snake.draw_snake()
+        self.draw_score()
 
     def check_collision(self):
         if self.fruit.pos == self.snake.body[0]: 
@@ -70,9 +69,9 @@ class MAIN:
     def check_fail(self):
         # 2 ways. 1.snake is outside the screen, 2.snake hits itself
         #1.
-        if not 0 <= self.snake.body[0].x < cell_number: # self.snake.body is the body of our snake, and [0] is going to be our head;
-            self.game_over() # after defining we need to call it in main fn(update(self))
-        if not 0 <= self.snake.body[0].y < cell_number: # for top and bottom(earlier was .x so only worked for right and left)
+        if not 0 <= self.snake.body[0].x < cell_number:
+            self.game_over()
+        if not 0 <= self.snake.body[0].y < cell_number:
             self.game_over()
 
         #2.
@@ -80,11 +79,20 @@ class MAIN:
             if block == self.snake.body[0]:
                 self.game_over()
         
-
-
     def game_over(self):
         pygame.quit()
         sys.exit()
+
+    def draw_score(self): # for score we will check teh length of the snake
+        score_text = str(len(self.snake.body) - 3) # initial size of snake is 3 so - 3
+        score_surface = game_font.render(score_text,True,(56,74,12)) # score_surface = game_font.render(text(score text),aa(anti alias text)-it is used to make the text little smoother[true or false],color(for right now we will use RGB(56,74,12)))
+        score_x = int(cell_size * cell_number - 60) # we r positioning the score board. cell_size*xell_number will give us right end of the screen, and from that we will remove couple of pixels(60), that means we r going to the right end of the screen and a bit left
+        score_y = int(cell_size * cell_number - 40) # all the way down but little up
+        score_rect = score_surface.get_rect(center = (score_x,score_y))
+        #to put on screen
+        # screen.blit(score_surface,position)
+        screen.blit(score_surface,score_rect)
+
 
 
 pygame.init()
@@ -92,6 +100,7 @@ cell_size = 40
 cell_number = 20
 screen = pygame.display.set_mode((cell_number * cell_size,cell_number * cell_size))
 clock = pygame.time.Clock()
+game_font = pygame.font.Font('Python\snake\Font\hp.ttf', 25) # this will initiate the font, syntax: game_font = pygame.font.Font(font name,font size)
 
 main_game = MAIN()
 

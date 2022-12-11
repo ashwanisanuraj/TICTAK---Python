@@ -1,5 +1,4 @@
-# to kill the snake when it hits the wall or itself
-# we need to add 2 if conditions
+# fruit graphichs and fruit on score
 
 import pygame, sys,random
 from pygame.math import Vector2
@@ -32,7 +31,6 @@ class SNAKE:
     def add_block(self):
         self.new_block = True
 
-
 class FRUIT:
     def __init__(self):
        self.randomize()
@@ -40,13 +38,13 @@ class FRUIT:
 
     def draw_fruit(self):
         fruit_rect = pygame.Rect(int(self.pos.x * cell_size),int(self.pos.y * cell_size),cell_size,cell_size) 
-        pygame.draw.rect(screen,(126,166,114),fruit_rect)           
+        screen.blit(apple,fruit_rect) # for importing the apple instead of a rectangle
+        # pygame.draw.rect(screen,(126,166,114),fruit_rect)           
 
     def randomize(self):
         self.x = random.randint(0,cell_number - 1)  
         self.y = random.randint(0,cell_number - 1)
         self.pos = Vector2(self.x,self.y)
-
 
 class MAIN: 
     def __init__(self):
@@ -61,6 +59,7 @@ class MAIN:
     def draw_elements(self): 
         self.fruit.draw_fruit()
         self.snake.draw_snake()
+        self.draw_score()
 
     def check_collision(self):
         if self.fruit.pos == self.snake.body[0]: 
@@ -68,11 +67,9 @@ class MAIN:
             self.snake.add_block()
 
     def check_fail(self):
-        # 2 ways. 1.snake is outside the screen, 2.snake hits itself
-        #1.
-        if not 0 <= self.snake.body[0].x < cell_number: # self.snake.body is the body of our snake, and [0] is going to be our head;
-            self.game_over() # after defining we need to call it in main fn(update(self))
-        if not 0 <= self.snake.body[0].y < cell_number: # for top and bottom(earlier was .x so only worked for right and left)
+        if not 0 <= self.snake.body[0].x < cell_number:
+            self.game_over()
+        if not 0 <= self.snake.body[0].y < cell_number:
             self.game_over()
 
         #2.
@@ -80,11 +77,26 @@ class MAIN:
             if block == self.snake.body[0]:
                 self.game_over()
         
-
-
     def game_over(self):
         pygame.quit()
         sys.exit()
+
+    def draw_score(self): 
+        score_text = str(len(self.snake.body) - 3) 
+        score_surface = game_font.render(score_text,True,(56,74,12)) 
+        score_x = int(cell_size * cell_number - 60)
+        score_y = int(cell_size * cell_number - 40) 
+        score_rect = score_surface.get_rect(center = (score_x,score_y))
+        apple_rect = apple.get_rect(midright = (score_rect.left,score_rect.centery))
+        bg_rect = pygame.Rect(apple_rect.left,apple_rect.top,apple_rect.width + score_rect.width + 6,apple_rect.height)    # bg_rect = pygame.Rect(x,y,w,h)
+
+        pygame.draw.rect(screen,(167,209,61),bg_rect)
+        screen.blit(score_surface,score_rect)
+
+        # to draw a apple next to score(after graphical)
+        screen.blit(apple,apple_rect) # screen.blit(apple,position)
+        pygame.draw.rect(screen,(56,74,12),bg_rect,2) # to overlap on the score board
+
 
 
 pygame.init()
@@ -92,11 +104,14 @@ cell_size = 40
 cell_number = 20
 screen = pygame.display.set_mode((cell_number * cell_size,cell_number * cell_size))
 clock = pygame.time.Clock()
+apple = pygame.image.load('Python\snake\Graphics\Apple.png').convert_alpha() #convert_alpha will convert the png into a image that python can work on better
+game_font = pygame.font.Font('Python\snake\Font\hp.ttf', 25) 
 
-main_game = MAIN()
 
 SCREEN_UPDATE = pygame.USEREVENT
 pygame.time.set_timer(SCREEN_UPDATE,150)
+
+main_game = MAIN()
 
 while True:
     for event in pygame.event.get():
