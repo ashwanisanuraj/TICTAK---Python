@@ -73,5 +73,3 @@ for i in range(9):
             break
         
 print("GAME OVER!!")
-
-print('changed at 12:17')
