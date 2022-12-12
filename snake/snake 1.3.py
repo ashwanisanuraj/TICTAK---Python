@@ -1,4 +1,5 @@
-# drawing grass
+# version 1 complete
+# with graphics
 
 import pygame, sys,random
 from pygame.math import Vector2
@@ -155,17 +156,17 @@ class MAIN:
         screen.blit(apple,apple_rect)
         pygame.draw.rect(screen,(56,74,12),bg_rect,2)
 
-    def draw_grass(self): # to draw the grass, cycyle through each block and change it
+    def draw_grass(self):
         grass_color = (167,209,61)
         for row in range(cell_number):
             if row % 2 == 0:
                 for col in range(cell_number):
-                    if col % 2 == 0: # this will give this grass colored look to every 2nd block
+                    if col % 2 == 0:
                         grass_rect = pygame.Rect(col * cell_size,row * cell_size,cell_size,cell_size)
                         pygame.draw.rect(screen,grass_color,grass_rect)
             else:
                 for col in range(cell_number):
-                    if col % 2 != 0: # this will give this grass colored look to every 2nd block
+                    if col % 2 != 0:
                         grass_rect = pygame.Rect(col * cell_size,row * cell_size,cell_size,cell_size)
                         pygame.draw.rect(screen,grass_color,grass_rect)
 

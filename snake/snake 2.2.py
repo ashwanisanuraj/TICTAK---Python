@@ -1,4 +1,5 @@
-# drawing grass
+# everything ready
+
 
 import pygame, sys,random
 from pygame.math import Vector2
@@ -7,7 +8,7 @@ from pygame.math import Vector2
 class SNAKE:
     def __init__(self):
         self.body = [Vector2(5,10),Vector2(4,10),Vector2(3,10)]
-        self.direction = Vector2(1,0)
+        self.direction = Vector2(0,0)
         self.new_block = False
 
         self.head_up = pygame.image.load('Python\snake\Graphics\head_up.png').convert_alpha()
@@ -28,6 +29,8 @@ class SNAKE:
         self.body_tl = pygame.image.load('Python\snake\Graphics\Body_tl.png').convert_alpha()
         self.body_br = pygame.image.load('Python\snake\Graphics\Body_br.png').convert_alpha()
         self.body_bl = pygame.image.load('Python\snake\Graphics\Body_bl.png').convert_alpha()
+
+        self.crunch_sound = pygame.mixer.Sound('Python\snake\Sound\Sound_crunch.wav')
 
     def draw_snake(self):
         # 3. 
@@ -90,10 +93,16 @@ class SNAKE:
     def add_block(self):
         self.new_block = True
 
+    def play_crunch_sound(self):
+        self.crunch_sound.play()
+
+    def reset(self):
+        self.body = [Vector2(5,10),Vector2(4,10),Vector2(3,10)]
+        self.direction = Vector2(0,0)
+
 class FRUIT:
     def __init__(self):
        self.randomize()
-
 
     def draw_fruit(self):
         fruit_rect = pygame.Rect(int(self.pos.x * cell_size),int(self.pos.y * cell_size),cell_size,cell_size) 
@@ -120,11 +129,15 @@ class MAIN:
         self.snake.draw_snake()
         self.draw_score()
         
-
     def check_collision(self):
         if self.fruit.pos == self.snake.body[0]: 
             self.fruit.randomize()
             self.snake.add_block()
+            self.snake.play_crunch_sound()
+
+        for block in self.snake.body[1:]:
+            if block == self.fruit.pos:
+                self.fruit.randomize()
 
     def check_fail(self):
         if not 0 <= self.snake.body[0].x < cell_number:
@@ -138,8 +151,7 @@ class MAIN:
                 self.game_over()
         
     def game_over(self):
-        pygame.quit()
-        sys.exit()
+        self.snake.reset()
 
     def draw_score(self): 
         score_text = str(len(self.snake.body) - 3) 
@@ -155,22 +167,22 @@ class MAIN:
         screen.blit(apple,apple_rect)
         pygame.draw.rect(screen,(56,74,12),bg_rect,2)
 
-    def draw_grass(self): # to draw the grass, cycyle through each block and change it
+    def draw_grass(self):
         grass_color = (167,209,61)
         for row in range(cell_number):
             if row % 2 == 0:
                 for col in range(cell_number):
-                    if col % 2 == 0: # this will give this grass colored look to every 2nd block
+                    if col % 2 == 0:
                         grass_rect = pygame.Rect(col * cell_size,row * cell_size,cell_size,cell_size)
                         pygame.draw.rect(screen,grass_color,grass_rect)
             else:
                 for col in range(cell_number):
-                    if col % 2 != 0: # this will give this grass colored look to every 2nd block
+                    if col % 2 != 0:
                         grass_rect = pygame.Rect(col * cell_size,row * cell_size,cell_size,cell_size)
                         pygame.draw.rect(screen,grass_color,grass_rect)
 
 
-
+pygame.mixer.pre_init(44100,-16,2,512)
 pygame.init()
 cell_size = 40
 cell_number = 20
