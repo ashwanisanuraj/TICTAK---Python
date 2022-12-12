@@ -1,5 +1,4 @@
-# to give graphics to the snake
-# we need to cycle through every block in snake.body, and relate how the block reacts with previous block there
+# drawing grass
 
 import pygame, sys,random
 from pygame.math import Vector2
@@ -11,7 +10,6 @@ class SNAKE:
         self.direction = Vector2(1,0)
         self.new_block = False
 
-        # to get graphical image of snake wee need to get it for up,down,left,rigth for head, body and tail
         self.head_up = pygame.image.load('Python\snake\Graphics\head_up.png').convert_alpha()
         self.head_down = pygame.image.load('Python\snake\Graphics\head_down.png').convert_alpha()
         self.head_left = pygame.image.load('Python\snake\Graphics\head_left.png').convert_alpha()
@@ -36,40 +34,24 @@ class SNAKE:
         self.update_head_graphics()
         self.update_tail_graphics()
 
-        # for block in self.body:
-        #     x_pos = int(block.x * cell_size)
-        #     y_pos = int(block.y * cell_size)
-        #     block_rect = pygame.Rect(x_pos,y_pos,cell_size,cell_size)
-        #     pygame.draw.rect(screen,(183,111,122),block_rect)
-
-        # first we want to look for every block in snake body
-        for index,block in enumerate(self.body):  # we want to look at more thing then just the block, we need to look at the block before and after, so we use enumarate. enumarate gives us an index on which object we r in inside the block
-            # 1. we need a rect for the positioning
-            # 2. what direction is theface headiing
-            # 1. 
+        for index,block in enumerate(self.body): 
             x_pos = int(block.x * cell_size)
             y_pos = int(block.y * cell_size)
             block_rect = pygame.Rect(x_pos,y_pos,cell_size,cell_size)
 
-            # 2. 
             if index == 0:
-                # screen.blit(self.head_right,block_rect) # after step 3. 
                 screen.blit(self.head,block_rect)
-
-                # 3. snake head direction not updating
-            elif index == len(self.body) - 1:  # elif index = last item in self.body
+            elif index == len(self.body) - 1: 
                 screen.blit(self.tail,block_rect)
 
             else: #for middle body
-                previous_block = self.body[index + 1] - block # we r indexing from self (index is going to be our current element).body and then add one or sub to get to next or previous block
+                previous_block = self.body[index + 1] - block 
                 next_block = self.body[index - 1] - block
-                # we have to check previos block and next block r at the same x and y coordinate. the block between them will be verticle or horizontal
                 if previous_block.x == next_block.x:
                     screen.blit(self.body_vertical,block_rect)
                 elif previous_block.y == next_block.y:
                     screen.blit(self.body_horizontal,block_rect)
 
-                # for turning, 
                 else:
                     if previous_block.x == -1 and next_block.y == -1 or previous_block.y == -1 and next_block.x == -1:
                         screen.blit(self.body_tl,block_rect)
@@ -80,11 +62,7 @@ class SNAKE:
                     elif previous_block.x == 1 and next_block.y == 1 or previous_block.y == 1 and next_block.x == 1:
                         screen.blit(self.body_br,block_rect)
 
-
-            # else:
-            #     pygame.draw.rect(screen,(150,100,100),block_rect)
-
-    def update_head_graphics(self): # we will subtract the head to the item that comes just next to it. 
+    def update_head_graphics(self):
         head_relation = self.body[1] - self.body[0]
         if head_relation == Vector2(1,0): self.head = self.head_left
         elif head_relation == Vector2(-1,0): self.head = self.head_right
